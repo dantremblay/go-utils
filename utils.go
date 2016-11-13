@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"fmt"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -35,4 +37,10 @@ func StringInSlice(a string, list []string) bool {
 	}
 
 	return false
+}
+
+func Exit(err error) {
+	fmt.Println(err)
+
+	os.Exit(1)
 }

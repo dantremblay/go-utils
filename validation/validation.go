@@ -3,7 +3,6 @@ package validation
 import (
 	"fmt"
 	"net"
-	"os"
 	"regexp"
 	"strings"
 )
@@ -16,12 +15,6 @@ var (
 	NotValidFQDN      = fmt.Errorf("fqdn is not valid")
 	NotValidIPAddr    = fmt.Errorf("ip address is not valid")
 )
-
-func Exit(err error) {
-	fmt.Println(err)
-
-	os.Exit(1)
-}
 
 func IsValidName(name string) error {
 	reName := regexp.MustCompile(`^[a-zA-Z0-9\-\_]+$`)
