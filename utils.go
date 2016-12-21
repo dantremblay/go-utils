@@ -16,14 +16,16 @@ func RecoverFunc() {
 func ConvertSliceToMap(sep string, slice []string) map[string]string {
 	result := make(map[string]string)
 
-	if len(slice) == 0 {
-		return nil
-	}
+	if len(slice) > 0 {
+		for _, s := range slice {
+			if ! strings.Contains(s, sep) {
+				continue
+			}
 
-	for _, s := range slice {
-		split := strings.Split(s, sep)
+			split := strings.Split(s, sep)
 
-		result[split[0]] = split[1]
+			result[split[0]] = split[1]
+		}
 	}
 
 	return result
