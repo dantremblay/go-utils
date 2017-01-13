@@ -16,21 +16,23 @@ var (
 	NotValidUsername  = fmt.Errorf("username is not valid")
 )
 
-func IsValidName(name string) error {
-	reName := regexp.MustCompile(`^[a-zA-Z0-9\-\_]+$`)
-
-	if !reName.MatchString(name) {
-		return NotValidName
+func IsValidFQDN(s string) error {
+	if len(s) == 0 || len(s) > 254 {
+		return NotValidFQDN
 	}
 
-	return nil
-}
+	parts := strings.Split(s, ".")
 
-func IsValidUsername(name string) error {
-	reName := regexp.MustCompile(`^[a-zA-Z0-9\-\_\.]+$`)
+	for i, p := range parts {
+		rePart := regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9\-]{1,63}$`)
 
-	if !reName.MatchString(name) {
-		return NotValidUsername
+		if i == len(parts)-1 {
+			rePart = regexp.MustCompile(`^[a-zA-Z]{2,63}$`)
+		}
+
+		if !rePart.MatchString(p) {
+			return NotValidFQDN
+		}
 	}
 
 	return nil
@@ -64,23 +66,21 @@ func IsValidIP(ip string) error {
 	return nil
 }
 
-func IsValidFQDN(s string) error {
-	if len(s) == 0 || len(s) > 254 {
-		return NotValidFQDN
+func IsValidName(name string) error {
+	reName := regexp.MustCompile(`^[a-zA-Z0-9\-\_]+$`)
+
+	if !reName.MatchString(name) {
+		return NotValidName
 	}
 
-	parts := strings.Split(s, ".")
+	return nil
+}
 
-	for i, p := range parts {
-		rePart := regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9\-]{1,63}$`)
+func IsValidUsername(name string) error {
+	reName := regexp.MustCompile(`^[a-zA-Z0-9\-\_\.]+$`)
 
-		if i == len(parts)-1 {
-			rePart = regexp.MustCompile(`^[a-zA-Z]{2,63}$`)
-		}
-
-		if !rePart.MatchString(p) {
-			return NotValidFQDN
-		}
+	if !reName.MatchString(name) {
+		return NotValidUsername
 	}
 
 	return nil
