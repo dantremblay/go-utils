@@ -8,12 +8,12 @@ import (
 )
 
 var (
-	NotValidName      = fmt.Errorf("name is not valid")
-	NotValidUsername  = fmt.Errorf("username is not valid")
+	NotValidFQDN      = fmt.Errorf("fqdn is not valid")
 	NotValidGroupname = fmt.Errorf("groupname is not valid")
 	NotValidHostname  = fmt.Errorf("hostname is not valid")
-	NotValidFQDN      = fmt.Errorf("fqdn is not valid")
 	NotValidIPAddr    = fmt.Errorf("ip address is not valid")
+	NotValidName      = fmt.Errorf("name is not valid")
+	NotValidUsername  = fmt.Errorf("username is not valid")
 )
 
 func IsValidName(name string) error {
