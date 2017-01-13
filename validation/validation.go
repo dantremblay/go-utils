@@ -8,6 +8,7 @@ import (
 )
 
 var (
+	NotValidEmail     = fmt.Errorf("email is not valid")
 	NotValidFQDN      = fmt.Errorf("fqdn is not valid")
 	NotValidGroupname = fmt.Errorf("groupname is not valid")
 	NotValidHostname  = fmt.Errorf("hostname is not valid")
@@ -15,6 +16,26 @@ var (
 	NotValidName      = fmt.Errorf("name is not valid")
 	NotValidUsername  = fmt.Errorf("username is not valid")
 )
+
+func IsValidEmail(name string) error {
+	reName := regexp.MustCompile(`^[a-zA-Z0-9\-\_\.]+$`)
+
+	if strings.Count(name, "@") != 1 {
+		return NotValidEmail
+	}
+
+	parts := strings.SplitN(name, "@", 2)
+
+	if !reName.MatchString(parts[0]) {
+		return NotValidEmail
+	}
+
+	if err := IsValidFQDN(parts[1]); err != nil {
+		return NotValidEmail
+	}
+
+	return nil
+}
 
 func IsValidFQDN(s string) error {
 	if len(s) == 0 || len(s) > 254 {
