@@ -13,6 +13,18 @@ func RecoverFunc() {
 	}
 }
 
+func CreateSlice(input, sep string) []string {
+	result := []string{}
+
+	items := strings.Split(input, sep)
+
+	for _, item := range items {
+		result = append(result, strings.TrimSpace(item))
+	}
+
+	return result
+}
+
 func ConvertSliceToMap(sep string, slice []string) map[string]string {
 	result := make(map[string]string)
 
