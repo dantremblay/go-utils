@@ -14,6 +14,7 @@ var (
 	NotValidHostname  = fmt.Errorf("hostname is not valid")
 	NotValidIPAddr    = fmt.Errorf("ip address is not valid")
 	NotValidName      = fmt.Errorf("name is not valid")
+	NotValidPort      = fmt.Errorf("port is not valid")
 	NotValidUsername  = fmt.Errorf("username is not valid")
 )
 
@@ -92,6 +93,14 @@ func IsValidName(name string) error {
 
 	if !reName.MatchString(name) {
 		return NotValidName
+	}
+
+	return nil
+}
+
+func IsValidPort(port int) error {
+	if port < 0 && port > 65535 {
+		return NotValidPort
 	}
 
 	return nil
