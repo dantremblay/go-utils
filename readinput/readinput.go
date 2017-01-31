@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+
+	"github.com/howeyc/gopass"
 )
 
 func ReadInput(label string) string {
@@ -19,4 +21,12 @@ func ReadInput(label string) string {
 	count := len(input)
 
 	return input[0 : count-1]
+}
+
+func ReadPassword(label string) string {
+	fmt.Printf("%s : ", label)
+
+	input, _ := gopass.GetPasswdMasked()
+
+	return string(input)
 }
