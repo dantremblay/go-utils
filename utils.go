@@ -43,9 +43,16 @@ func ConvertSliceToMap(sep string, slice []string) map[string]string {
 	return result
 }
 
-func StringInSlice(a string, list []string) bool {
+func StringInSlice(a string, list []string, insensitive bool) bool {
 	for _, v := range list {
-		if a == v {
+		a1 := a
+		v1 := v
+		if insensitive {
+			a1 = strings.ToLower(a)
+			v1 = strings.ToLower(v)
+		}
+
+		if a1 == v1 {
 			return true
 		}
 	}
