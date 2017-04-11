@@ -65,3 +65,13 @@ func Exit(err error) {
 
 	os.Exit(1)
 }
+
+func RemoveLastChar(s string) string {
+	strLen := len(s) - 1
+	newStr := s
+	if strLen > 0 {
+		newStr = s[0:strLen]
+	}
+
+	return newStr
+}
