@@ -14,7 +14,7 @@ type Interface struct {
 	IP
 }
 
-type Interfaces map[string]Interface
+type Interfaces map[string]*Interface
 
 func New() Interfaces {
         return make(Interfaces)
@@ -49,7 +49,7 @@ func (intfs Interfaces) Get() error {
 	return nil
 }
 
-func (intfs Interfaces) GetIntf(intf string) Interface {
+func (intfs Interfaces) GetIntf(intf string) *Interface {
 	return intfs[intf]
 }
 
@@ -76,9 +76,9 @@ func (intfs Interfaces) add(iface net.Interface, ip net.IP) {
 		}
         } else {
 		if ipver == 4 {
-			intfs[iface.Name] = Interface{iface, IP{V4: []string{ip.String()}}}
+			intfs[iface.Name] = &Interface{iface, IP{V4: []string{ip.String()}}}
 		} else {
-			intfs[iface.Name] = Interface{iface, IP{V6: []string{ip.String()}}}
+			intfs[iface.Name] = &Interface{iface, IP{V6: []string{ip.String()}}}
 		}
 	}
 }
