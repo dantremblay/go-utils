@@ -110,3 +110,12 @@ func StripCtlAndExtFromUnicode(str string) string {
 
 	return str
 }
+
+func GetEnvDefault(envKey, defValue string) string {
+	val, ok := os.LookupEnv(envKey)
+	if ok {
+		return val
+	} else {
+		return defValue
+	}
+}
