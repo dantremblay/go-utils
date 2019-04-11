@@ -111,11 +111,20 @@ func StripCtlAndExtFromUnicode(str string) string {
 	return str
 }
 
-func GetEnvDefault(envKey, defValue string) string {
+func GetEnv(envKey string) (string, error) {
 	val, ok := os.LookupEnv(envKey)
-	if ok {
-		return val
-	} else {
+	if !ok {
+		return "", fmt.Errorf("environment variable %q not set", envKey)
+	}
+
+	return val, nil
+}
+
+func GetEnvDefault(envKey, defValue string) string {
+	val, err := GetEnv(envKey)
+	if err != nil {
 		return defValue
 	}
+
+	return val
 }
