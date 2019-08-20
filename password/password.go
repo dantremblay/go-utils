@@ -1,17 +1,102 @@
 package password
 
 import (
-	"regexp"
+	"unicode"
 
+	"github.com/juliengk/go-utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func ValidatePassword(p string) bool {
-	var passwordRegexp = regexp.MustCompile(`^[a-zA-Z0-9!@#$%\*\(\)\-_]{1,24}$`)
+type ValidatePasswordOptions struct {
+	MinLen     int
+	MaxLen     int
+	MinLower   int
+	MinUpper   int
+	MinNumber  int
+	MinSpecial int
+}
 
-	result := passwordRegexp.MatchString(p)
+/*
+	200: OK
+	300: No password provided
+	301: Password length is too short
+	302: Password length is too long
+	401: Not enough lowercase characters
+	402: Not enough uppercase characters
+	403: Not enough numbers
+	404: Not enough special characters
+*/
+func ValidatePassword(p string, opts ValidatePasswordOptions) (bool, []int) {
+	isSpecial := func(c string) bool {
+		validChars := []string{
+			"!",
+			"@",
+			"#",
+			"$",
+			"%",
+			"*",
+			"(",
+			")",
+			"-",
+			"_",
+		}
 
-	return result
+		if utils.StringInSlice(c, validChars, false) {
+			return true
+		}
+
+		return false
+	}
+
+	var (
+		lowe    int
+		upper   int
+		number  int
+		special int
+
+		codes []int
+	)
+
+	pL := len(p)
+	if pL == 0 || pL < opts.MinLen || pL > opts.MaxLen {
+		return false, []int{300}
+	}
+
+	sum := opts.MinLower + opts.MinUpper + opts.MinNumber + opts.MinSpecial
+	if sum > opts.MinLen {
+		return false, []int{301}
+	}
+
+	for _, c := range p {
+		switch {
+		case unicode.IsLower(c):
+			lower++
+		case unicode.IsUpper(c):
+			upper++
+		case unicode.IsNumber(c):
+			number++
+		case isSpecial(string(c)):
+			special++
+		}
+	}
+
+	if opts.MinLower > 0 && lower < opts.MinLower {
+		codes = append(codes, 401)
+	}
+	if opts.MinUpper > 0 && upper < opts.MinUpper {
+		codes = append(codes, 402)
+	}
+	if opts.MinNumber > 0 && number < opts.MinNumber {
+		codes = append(codes, 403)
+	}
+	if opts.MinSpecial > 0 && special < opts.MinSpecial {
+		codes = append(codes, 404)
+	}
+	if len(codes) > 0 {
+		return false, codes
+	}
+
+	return true, []int{200}
 }
 
 func GeneratePassword(rawpassword string) string {
