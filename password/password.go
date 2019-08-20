@@ -49,7 +49,7 @@ func ValidatePassword(p string, opts ValidatePasswordOptions) (bool, []int) {
 	}
 
 	var (
-		lowe    int
+		lower   int
 		upper   int
 		number  int
 		special int
